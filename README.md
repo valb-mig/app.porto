@@ -4,6 +4,10 @@ Página inicial da máquina: atalhos, tudo o que está rodando (localhost, Docke
 
 Nada precisa ser cadastrado: o Porto descobre sozinho o que escuta em cada porta e de onde aquilo veio.
 
+![Tela inicial do Porto: atalhos, serviços rodando por porta e monitor de sites](docs/screenshots/inicio.png)
+
+<sub>Os prints usam dados de demonstração, não de uma máquina real.</sub>
+
 ## O que tem
 
 **Início**
@@ -21,12 +25,20 @@ Nada precisa ser cadastrado: o Porto descobre sozinho o que escuta em cada porta
 
 Em cada serviço: abrir, reiniciar, parar/iniciar, encerrar processo (com opção de forçar), **compartilhar na tailnet** com um clique (`tailscale serve`) e remover, fixar no início (fixados avisam no desktop se pararem), ocultar e renomear. O painel lateral mostra **logs ao vivo** (Docker, journal ou arquivo), com filtro, "só erros", pausa e download.
 
+![Serviços agrupados por projeto](docs/screenshots/servicos.png)
+
+![Painel de um serviço com logs ao vivo](docs/screenshots/servico-logs.png)
+
 **Acessos**
 - Quem está conectado agora em cada serviço: processos desta máquina (Zen, Chrome, node de outro projeto…), dispositivos da tailnet pelo nome, containers, rede local ou internet.
 - Histórico de 7 dias (primeira e última vez, tempo conectado, pico de conexões simultâneas).
 - **Visitas aos sites**, lidas dos access logs de nginx/Apache/Caddy: visitantes, páginas mais vistas, dispositivos, de onde vêm e páginas por hora.
 
+![Quem está conectado em cada serviço e visitas lidas do access log](docs/screenshots/acessos.png)
+
 **Sistema**: CPU, memória, rede, temperaturas, bateria, discos, interfaces e os processos que mais consomem (os seus podem ser encerrados por ali).
+
+![Métricas do sistema e processos](docs/screenshots/sistema.png)
 
 ## Rodando
 
