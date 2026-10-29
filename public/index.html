@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Porto</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/css/porto.css" />
+    <script type="module" src="/js/main.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Pular para o conteúdo</a>
+
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">porto</span>
+        <span class="brand-host" id="host-name"></span>
+      </div>
+      <nav class="tabs" aria-label="Seções">
+        <a href="#inicio" data-tab="inicio">Início</a>
+        <a href="#servicos" data-tab="servicos">Serviços</a>
+        <a href="#acessos" data-tab="acessos">Acessos</a>
+        <a href="#sistema" data-tab="sistema">Sistema</a>
+      </nav>
+      <div class="vitals" id="vitals" aria-live="off"></div>
+    </header>
+
+    <main id="main">
+      <!-- Início -->
+      <section class="view" id="view-inicio" data-view="inicio">
+        <div class="home-head">
+          <div class="clock" id="clock" aria-hidden="true"></div>
+          <p class="today" id="today"></p>
+        </div>
+
+        <form class="omni" id="omni" role="search" autocomplete="off">
+          <label class="sr-only" for="omni-input">Buscar, abrir porta ou URL</label>
+          <svg class="omni-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>
+          <input
+            id="omni-input"
+            type="text"
+            autofocus
+            spellcheck="false"
+            role="combobox"
+            aria-expanded="false"
+            aria-controls="omni-list"
+            aria-autocomplete="list"
+            placeholder="Buscar na web, abrir uma porta como 3100 ou filtrar atalhos"
+          />
+          <kbd class="omni-kbd">/</kbd>
+          <ul class="omni-list" id="omni-list" role="listbox" hidden></ul>
+        </form>
+
+        <div class="home-grid">
+          <div class="home-main">
+            <div class="section-head">
+              <h2>Atalhos</h2>
+              <div class="section-tools">
+                <button class="btn ghost" type="button" data-action="add-shortcut" id="add-shortcut-btn" hidden>Novo atalho</button>
+                <button class="btn ghost" type="button" data-action="add-group" id="add-group-btn" hidden>Novo grupo</button>
+                <button class="btn ghost" type="button" data-action="toggle-edit" id="edit-toggle" aria-pressed="false">Editar atalhos</button>
+              </div>
+            </div>
+            <div id="shortcuts" class="shortcut-groups"></div>
+          </div>
+
+          <aside class="home-side">
+            <div class="section-head">
+              <h2>Rodando agora</h2>
+              <a class="section-link" href="#servicos">Ver todos</a>
+            </div>
+            <div id="berths" class="berths"></div>
+
+            <div class="section-head">
+              <h2>Sites</h2>
+              <div class="section-tools">
+                <button class="btn ghost" type="button" data-action="add-site">Monitorar site</button>
+              </div>
+            </div>
+            <div id="sites" class="sites"></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- Serviços -->
+      <section class="view" id="view-servicos" data-view="servicos" hidden>
+        <div class="filters">
+          <label class="sr-only" for="svc-filter">Filtrar serviços</label>
+          <input id="svc-filter" class="input" type="search" placeholder="Filtrar por nome, porta ou projeto" spellcheck="false" />
+          <div class="segmented" role="radiogroup" aria-label="Estado" id="svc-state">
+            <button type="button" role="radio" aria-checked="true" data-state="all">Todos</button>
+            <button type="button" role="radio" aria-checked="false" data-state="running">Rodando</button>
+            <button type="button" role="radio" aria-checked="false" data-state="stopped">Parados</button>
+          </div>
+          <label class="check"><input type="checkbox" id="svc-bg" /> <span>Apps e sistema</span> <span class="count" id="svc-bg-count"></span></label>
+          <label class="check"><input type="checkbox" id="svc-hidden" /> <span>Ocultos</span> <span class="count" id="svc-hidden-count"></span></label>
+          <p class="filters-summary" id="svc-summary"></p>
+        </div>
+        <div id="board" class="board"></div>
+      </section>
+
+      <!-- Acessos -->
+      <section class="view" id="view-acessos" data-view="acessos" hidden>
+        <div class="access-grid">
+          <div>
+            <div class="section-head"><h2>Conectados agora</h2><span class="section-note" id="live-note"></span></div>
+            <div id="live" class="live"></div>
+          </div>
+          <div>
+            <div class="section-head"><h2>Dispositivos da tailnet</h2></div>
+            <div id="devices" class="devices"></div>
+          </div>
+        </div>
+
+        <div class="section-head"><h2>Visitas aos sites</h2><span class="section-note">Lido dos access logs (nginx, Apache, Caddy)</span></div>
+        <div id="requests" class="requests"></div>
+
+        <div class="section-head">
+          <h2>Histórico de conexões</h2>
+          <span class="section-note">Últimos 7 dias, amostrado a cada 3 segundos</span>
+        </div>
+        <div class="filters compact">
+          <div class="segmented" role="radiogroup" aria-label="Origem" id="hist-kind">
+            <button type="button" role="radio" aria-checked="true" data-kind="all">Todas</button>
+            <button type="button" role="radio" aria-checked="false" data-kind="remote">Fora desta máquina</button>
+            <button type="button" role="radio" aria-checked="false" data-kind="internet">Internet</button>
+          </div>
+        </div>
+        <div id="history" class="table-wrap"></div>
+      </section>
+
+      <!-- Sistema -->
+      <section class="view" id="view-sistema" data-view="sistema" hidden>
+        <div id="sys-tiles" class="tiles"></div>
+        <div class="sys-charts">
+          <figure class="chart-card">
+            <figcaption>Uso de CPU nos últimos 10 minutos</figcaption>
+            <div class="chart" data-chart="cpu" data-skip-morph></div>
+          </figure>
+          <figure class="chart-card">
+            <figcaption>Memória em uso nos últimos 10 minutos</figcaption>
+            <div class="chart" data-chart="mem" data-skip-morph></div>
+          </figure>
+        </div>
+        <div class="sys-grid">
+          <div>
+            <div class="section-head"><h2>Discos</h2></div>
+            <div id="disks"></div>
+            <div class="section-head"><h2>Rede</h2></div>
+            <div id="ifaces" class="table-wrap"></div>
+          </div>
+          <div>
+            <div class="section-head"><h2>Processos</h2><span class="section-note" id="proc-note"></span></div>
+            <div class="segmented" role="radiogroup" aria-label="Ordenar processos" id="proc-sort">
+              <button type="button" role="radio" aria-checked="true" data-sort="cpu">Por CPU</button>
+              <button type="button" role="radio" aria-checked="false" data-sort="mem">Por memória</button>
+            </div>
+            <div id="procs" class="table-wrap"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Painel de detalhes do serviço -->
+    <div class="scrim" id="scrim" hidden></div>
+    <aside class="drawer" id="drawer" aria-labelledby="drawer-title" hidden>
+      <header class="drawer-head" id="drawer-head"></header>
+      <nav class="drawer-tabs" role="tablist" aria-label="Detalhes do serviço">
+        <button type="button" role="tab" data-dtab="logs" aria-selected="true">Logs</button>
+        <button type="button" role="tab" data-dtab="acessos" aria-selected="false">Acessos</button>
+        <button type="button" role="tab" data-dtab="detalhes" aria-selected="false">Detalhes</button>
+      </nav>
+      <div class="drawer-body">
+        <div class="dpanel" data-dpanel="logs">
+          <div class="log-tools">
+            <label class="sr-only" for="log-filter">Filtrar logs</label>
+            <input id="log-filter" class="input" type="search" placeholder="Filtrar linhas" spellcheck="false" />
+            <label class="check"><input type="checkbox" id="log-errors" /> <span>Só erros</span></label>
+            <label class="check"><input type="checkbox" id="log-wrap" checked /> <span>Quebrar linhas</span></label>
+            <button class="btn ghost" type="button" id="log-pause" aria-pressed="false">Pausar</button>
+            <button class="btn ghost" type="button" id="log-clear">Limpar</button>
+            <button class="btn ghost" type="button" id="log-download">Baixar</button>
+          </div>
+          <p class="log-source" id="log-source"></p>
+          <div class="log" id="log" tabindex="0" role="log" aria-label="Logs do serviço"></div>
+          <button class="btn jump" type="button" id="log-jump" hidden>Ir para o fim</button>
+        </div>
+        <div class="dpanel" data-dpanel="acessos" hidden><div id="drawer-access"></div></div>
+        <div class="dpanel" data-dpanel="detalhes" hidden><div id="drawer-details"></div></div>
+      </div>
+    </aside>
+
+    <!-- Atalho -->
+    <dialog id="dlg-shortcut" class="dialog">
+      <form method="dialog" id="form-shortcut">
+        <h2 id="dlg-shortcut-title">Novo atalho</h2>
+        <label>Nome <input class="input" name="title" required maxlength="80" /></label>
+        <label>Endereço <input class="input" name="url" required placeholder="https://… ou localhost:3000" spellcheck="false" /></label>
+        <label>Grupo <select class="input" name="group"></select></label>
+        <p class="form-error" data-error hidden></p>
+        <footer>
+          <button class="btn danger ghost" type="button" data-action="delete-shortcut" hidden>Excluir atalho</button>
+          <span class="spacer"></span>
+          <button class="btn ghost" type="button" data-action="close-dialog">Cancelar</button>
+          <button class="btn primary" type="submit">Salvar atalho</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <!-- Grupo -->
+    <dialog id="dlg-group" class="dialog">
+      <form method="dialog" id="form-group">
+        <h2 id="dlg-group-title">Novo grupo</h2>
+        <label>Nome do grupo <input class="input" name="title" required maxlength="80" /></label>
+        <footer>
+          <button class="btn danger ghost" type="button" data-action="delete-group" hidden>Excluir grupo</button>
+          <span class="spacer"></span>
+          <button class="btn ghost" type="button" data-action="close-dialog">Cancelar</button>
+          <button class="btn primary" type="submit">Salvar grupo</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <!-- Site monitorado -->
+    <dialog id="dlg-site" class="dialog">
+      <form method="dialog" id="form-site">
+        <h2 id="dlg-site-title">Monitorar site</h2>
+        <label>Nome <input class="input" name="title" maxlength="80" placeholder="Opcional" /></label>
+        <label>Endereço <input class="input" name="url" required placeholder="https://meusite.com.br" spellcheck="false" /></label>
+        <label>Verificar a cada
+          <select class="input" name="intervalSec">
+            <option value="60">1 minuto</option>
+            <option value="120">2 minutos</option>
+            <option value="300">5 minutos</option>
+            <option value="900">15 minutos</option>
+            <option value="3600">1 hora</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" name="notify" checked /> <span>Avisar no desktop quando cair ou voltar</span></label>
+        <p class="form-error" data-error hidden></p>
+        <footer>
+          <button class="btn danger ghost" type="button" data-action="delete-site" hidden>Parar de monitorar</button>
+          <span class="spacer"></span>
+          <button class="btn ghost" type="button" data-action="close-dialog">Cancelar</button>
+          <button class="btn primary" type="submit">Salvar</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <div class="tooltip" id="tooltip" role="status" hidden></div>
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+  </body>
+</html>
