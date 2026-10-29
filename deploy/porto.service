@@ -1,0 +1,19 @@
+# Modelo: o deploy/install.sh troca @DIR@ e @NODE@ pelos caminhos desta máquina.
+[Unit]
+Description=Porto (página inicial da máquina em http://localhost:7777)
+After=network-online.target docker.service tailscaled.service
+
+[Service]
+Type=simple
+WorkingDirectory=@DIR@
+ExecStart=@NODE@ src/index.ts
+SyslogIdentifier=porto
+# ss, systemctl, journalctl, tailscale, notify-send e tail ficam em algum destes.
+Environment=PATH=/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin
+Restart=on-failure
+RestartSec=3
+# O SIGTERM salva o histórico de acessos e de uptime antes de sair.
+TimeoutStopSec=10
+
+[Install]
+WantedBy=default.target
