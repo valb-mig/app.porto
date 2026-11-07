@@ -1,7 +1,12 @@
+import { existsSync } from 'node:fs';
 import { request } from 'node:http';
 import { mapLimit } from './util.ts';
 
 const SOCKET = process.env.DOCKER_SOCKET ?? '/var/run/docker.sock';
+// Com o Docker sob demanda (docker.socket), qualquer conexão no socket sobe o daemon: a listagem
+// periódica só fala com ele se já estiver rodando. O dockerd cria o pidfile ao subir e apaga ao
+// sair; só vale pro daemon do sistema (com DOCKER_SOCKET, pergunta direto).
+const PIDFILE = process.env.DOCKER_SOCKET ? undefined : '/run/docker.pid';
 
 export type Container = {
   id: string;
@@ -68,6 +73,7 @@ type Inspect = {
 
 /** null quando o Docker não está disponível (daemon parado ou sem permissão no socket). */
 export async function listContainers(): Promise<Container[] | null> {
+  if (PIDFILE && !existsSync(PIDFILE)) return null;
   let list: ListItem[];
   try {
     list = await json<ListItem[]>('/containers/json?all=1');
